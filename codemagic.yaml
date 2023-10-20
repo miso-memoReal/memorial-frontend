@@ -1,16 +1,10 @@
-version: "2.0"
-
-triggering:
-  cancel_previous_builds: true
-
 workflows:
   build:
     name: Build App
     environment:
-      vars:
-        FLUTTER_VERSION: "latest"
-      xcode: latest
-      cocoapods: default
+      flutter: "3.13.8"
+      # xcode: latest
+      # cocoapods: default
     cache:
       cache_paths:
         - $FLUTTER_ROOT/.pub-cache
@@ -29,3 +23,5 @@ workflows:
         notify:
           success: true
           failure: true
+    triggering:
+      cancel_previous_builds: true

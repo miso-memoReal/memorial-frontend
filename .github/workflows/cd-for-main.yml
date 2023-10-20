@@ -1,4 +1,4 @@
-name: CD for PR
+name: CD for Main
 on:
   push:
     branches:
@@ -14,11 +14,21 @@ jobs:
     timeout-minutes: 60
     runs-on:
       - ubuntu-latest
+    outputs:
+      branch: ${{ steps.branch.outputs.branch }}
     steps:
       - uses: actions/checkout@v3
-  #  ci:
-  #    uses: ./.github/workflows/ci.yml
-  #    secrets: inherit
+      - name: Get current branch
+        id: branch
+        run: echo ::set-output name=branch::$(echo ${GITHUB_REF#refs/heads/})
+  ci:
+    uses: ./.github/workflows/ci.yml
+    secrets: inherit
   build-and-publish:
     uses: ./.github/workflows/build-and-publish.yml
+    needs:
+      - prepare
+      - ci
+    with:
+      branch: ${{ needs.prepare.outputs.branch }}
     secrets: inherit
