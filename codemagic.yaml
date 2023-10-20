@@ -14,6 +14,7 @@ workflows:
     cache:
       cache_paths:
         - $FLUTTER_ROOT/.pub-cache
+        - $HOME/.gradle/caches
     scripts:
       - flutter pub get
       # - flutter build ios --release
@@ -21,11 +22,10 @@ workflows:
     artifacts:
       # - build/**/outputs/**/*.ipa
       - build/**/outputs/**/*.apk
-
-publishing:
-  slack:
-    channel: "#cicd"
-    notify_on_build_start: true
-    notify:
-      success: true
-      failure: true
+    publishing:
+      slack:
+        channel: "#cicd"
+        notify_on_build_start: true
+        notify:
+          success: true
+          failure: true
