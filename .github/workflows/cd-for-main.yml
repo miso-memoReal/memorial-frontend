@@ -1,4 +1,4 @@
-name: CD for PR
+name: CD for Main
 on:
   push:
     branches:
