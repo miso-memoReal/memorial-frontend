@@ -9,6 +9,11 @@ jobs:
     steps:
       - name: Send webhook
         run: |
-          curl -X POST ${{ secrets.CODEMAGIC_WEBHOOK }} \
-               -H "Content-Type: application/json" \
-               -d '{}'
+          curl -X POST https://api.codemagic.io/builds \
+          -H 'Content-Type: application/json' \
+          -H 'X-Auth-Token: ${{ secrets.CODEMAGIC_API_TOKEN }}' \
+          -d '{
+                "appId": "${{ secrets.CODEMAGIC_APP_ID }}",
+                "workflowId": "build",
+                "branch": "main"
+              }'
