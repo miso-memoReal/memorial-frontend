@@ -2,10 +2,9 @@ workflows:
   build:
     name: Build App
     environment:
-      vars:
-        FLUTTER_VERSION: "latest"
-      xcode: latest
-      cocoapods: default
+      flutter: "3.13.8"
+      # xcode: latest
+      # cocoapods: default
     cache:
       cache_paths:
         - $FLUTTER_ROOT/.pub-cache
