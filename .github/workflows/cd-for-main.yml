@@ -16,9 +16,12 @@ jobs:
       - ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-  #  ci:
-  #    uses: ./.github/workflows/ci.yml
-  #    secrets: inherit
+  ci:
+    uses: ./.github/workflows/ci.yml
+    secrets: inherit
   build-and-publish:
     uses: ./.github/workflows/build-and-publish.yml
+    needs:
+      - prepare
+      - ci
     secrets: inherit
