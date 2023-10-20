@@ -1,0 +1,43 @@
+version: "2.0"
+
+triggering:
+  cancel_previous_builds: true
+
+workflows:
+  android_build:
+    name: Build Android App
+    environment:
+      vars:
+        FLUTTER_VERSION: "latest"
+    cache:
+      cache_paths:
+        - $FLUTTER_ROOT/.pub-cache
+    scripts:
+      - flutter pub get
+      - flutter build apk --release
+    artifacts:
+      - build/**/outputs/**/*.apk
+
+  ios_build:
+    name: Build iOS App
+    environment:
+      vars:
+        FLUTTER_VERSION: "latest"
+      xcode: latest
+      cocoapods: default
+    cache:
+      cache_paths:
+        - $FLUTTER_ROOT/.pub-cache
+    scripts:
+      - flutter pub get
+      - flutter build ios --release
+    artifacts:
+      - build/**/outputs/**/*.ipa
+
+publishing:
+  slack:
+    channel: "#cicd"
+    notify_on_build_start: true
+    notify:
+      success: true
+      failure: true
