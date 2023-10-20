@@ -16,10 +16,10 @@ workflows:
         - $FLUTTER_ROOT/.pub-cache
     scripts:
       - flutter pub get
-      - flutter build ios --release
+      # - flutter build ios --release
       - flutter build apk --release
     artifacts:
-      - build/**/outputs/**/*.ipa
+      # - build/**/outputs/**/*.ipa
       - build/**/outputs/**/*.apk
 
 publishing:
