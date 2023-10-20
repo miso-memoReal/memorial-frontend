@@ -4,22 +4,8 @@ triggering:
   cancel_previous_builds: true
 
 workflows:
-  android_build:
-    name: Build Android App
-    environment:
-      vars:
-        FLUTTER_VERSION: "latest"
-    cache:
-      cache_paths:
-        - $FLUTTER_ROOT/.pub-cache
-    scripts:
-      - flutter pub get
-      - flutter build apk --release
-    artifacts:
-      - build/**/outputs/**/*.apk
-
-  ios_build:
-    name: Build iOS App
+  build:
+    name: Build App
     environment:
       vars:
         FLUTTER_VERSION: "latest"
@@ -31,8 +17,10 @@ workflows:
     scripts:
       - flutter pub get
       - flutter build ios --release
+      - flutter build apk --release
     artifacts:
       - build/**/outputs/**/*.ipa
+      - build/**/outputs/**/*.apk
 
 publishing:
   slack:
