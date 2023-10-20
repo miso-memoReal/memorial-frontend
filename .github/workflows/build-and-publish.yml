@@ -27,5 +27,5 @@ jobs:
           -d '{
                 "appId": "${{ secrets.CODEMAGIC_APP_ID }}",
                 "workflowId": "build",
-                "branch": "${{ github.event.inputs.branch }}"
+                "branch": "${{ inputs.branch }}"
               }'
