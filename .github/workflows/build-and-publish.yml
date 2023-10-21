@@ -19,7 +19,7 @@ jobs:
   build-and-publish:
     runs-on: ubuntu-latest
     steps:
-      - name: Send webhook
+      - name: Trigger Codemagic build
         run: |
           curl -X POST https://api.codemagic.io/builds \
           -H 'Content-Type: application/json' \
