@@ -33,4 +33,5 @@ jobs:
       - prepare
     with:
       branch: ${{ needs.prepare.outputs.branch }}
+      workflowId: build
     secrets: inherit

@@ -25,3 +25,27 @@ workflows:
           failure: true
     triggering:
       cancel_previous_builds: true
+  branch-build:
+    name: Build App
+    environment:
+      flutter: "3.13.8"
+      # xcode: latest
+      # cocoapods: default
+    cache:
+      cache_paths:
+        - $FLUTTER_ROOT/.pub-cache
+        - $HOME/.gradle/caches
+    scripts:
+      - flutter pub get
+      # - flutter build ios --release
+      - flutter build apk --release
+    artifacts:
+      # - build/**/outputs/**/*.ipa
+      - build/**/outputs/**/*.apk
+    publishing:
+      slack:
+        channel: "#cicd"
+        notify_on_build_start: true
+        notify:
+          success: true
+          failure: true

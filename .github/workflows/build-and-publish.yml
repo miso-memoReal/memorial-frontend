@@ -7,6 +7,11 @@ on:
         type: string
         required: true
         default: "main"
+      workflowId:
+        description: "Workflow to run"
+        type: string
+        required: true
+        default: "build"
   workflow_dispatch:
     inputs:
       branch:
@@ -14,6 +19,11 @@ on:
         type: string
         required: true
         default: "main"
+      workflowId:
+        description: "Workflow to run"
+        type: string
+        required: true
+        default: "build"
 
 jobs:
   build-and-publish:
@@ -26,6 +36,6 @@ jobs:
           -H 'X-Auth-Token: ${{ secrets.CODEMAGIC_API_TOKEN }}' \
           -d '{
                 "appId": "${{ secrets.CODEMAGIC_APP_ID }}",
-                "workflowId": "build",
+                "workflowId": "${{ inputs.workflowId }}",
                 "branch": "${{ inputs.branch }}"
               }'

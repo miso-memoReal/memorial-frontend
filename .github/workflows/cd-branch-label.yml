@@ -30,4 +30,5 @@ jobs:
       - prepare
     with:
       branch: ${{ github.head_ref }}
+      workflowId: branch-build
     secrets: inherit
