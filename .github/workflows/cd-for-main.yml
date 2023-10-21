@@ -1,0 +1,37 @@
+name: CD for Main
+on:
+  push:
+    branches:
+      - main
+      - master
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  prepare:
+    timeout-minutes: 60
+    runs-on:
+      - ubuntu-latest
+    outputs:
+      branch: ${{ steps.branch.outputs.branch }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Get current branch
+        id: branch
+        run: echo "branch=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_OUTPUT
+  ci:
+    uses: ./.github/workflows/ci.yml
+    needs:
+      - prepare
+    secrets: inherit
+  build-and-publish:
+    uses: ./.github/workflows/build-and-publish.yml
+    needs:
+      - ci
+      - prepare
+    with:
+      branch: ${{ needs.prepare.outputs.branch }}
+      workflowId: build
+    secrets: inherit
