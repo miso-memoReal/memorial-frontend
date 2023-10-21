@@ -1,9 +1,7 @@
-name: CD for Main
+name: CD for Branch env with Label
 on:
-  push:
-    branches:
-      - main
-      - master
+  pull_request:
+    types: [labeled]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -14,13 +12,12 @@ jobs:
     timeout-minutes: 60
     runs-on:
       - ubuntu-latest
-    outputs:
-      branch: ${{ steps.branch.outputs.branch }}
+    if: >-
+      ${{
+        github.event.label.name == 'PR Deploy'
+      }}
     steps:
       - uses: actions/checkout@v3
-      - name: Get current branch
-        id: branch
-        run: echo "branch=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_OUTPUT
   ci:
     uses: ./.github/workflows/ci.yml
     needs:
@@ -32,6 +29,6 @@ jobs:
       - ci
       - prepare
     with:
-      branch: ${{ needs.prepare.outputs.branch }}
-      workflowId: build
+      branch: ${{ github.head_ref }}
+      workflowId: branch-build
     secrets: inherit
