@@ -1,10 +1,25 @@
+// ignore_for_file: avoid_print, prefer_interpolation_to_compose_strings
+
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:memoreal/constants/constants.dart';
-import 'package:memoreal/page/pages.dart';
+import 'package:memoreal/page/camera_page.dart';
+// import 'package:memoreal/page/pages.dart';
 
-void main() {
-  // 初期化
-  WidgetsFlutterBinding.ensureInitialized();
+// カメラデバイス情報のリスト定義
+List<CameraDescription> cameras = [];
+
+Future<void> main() async {
+  try {
+    // 初期化
+    WidgetsFlutterBinding.ensureInitialized();
+
+    // デバイスで使用可能なカメラのリストを取得
+    cameras = await availableCameras();
+  } on CameraException catch (e) {
+    print(ErrorConstants.getCameraTitle + "$e");
+  }
+
   // 起動
   runApp(const MyApp());
 }
@@ -19,14 +34,13 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: AppConstants.appTitle,
       theme: ThemeData(
-        appBarTheme: const AppBarTheme(
-        //   // 非表示
-        //   elevation: 0.0,
-        //   color: Colors.transparent
-          color: ColorConstants.themeColor
-        )
-      ),
-      home: const HomePage(),
+          appBarTheme: const AppBarTheme(
+              //   // 非表示
+              //   elevation: 0.0,
+              //   color: Colors.transparent
+              color: ColorConstants.themeColor)),
+      // home: const HomePage(),
+      home: const CameraPage(),
     );
   }
 }
