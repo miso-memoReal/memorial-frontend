@@ -172,7 +172,7 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                 : Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Row(),
+                      const Row(),
                       const Text(PermissionConstans.cameraMsgDenied,
                           style: TextStyle(
                               color: ColorConstants.primaryColor,
@@ -195,9 +195,8 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
             floatingActionButton: FloatingActionButton(
               onPressed: () {
                 Navigator.pushNamed(context, "/memoCreate");
-                },
-                child: const Icon(Icons.add),
-            )
-        ));
+              },
+              child: const Icon(Icons.add),
+            )));
   }
 }
