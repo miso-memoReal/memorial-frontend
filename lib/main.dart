@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:memoreal/constants/constants.dart';
 import 'package:memoreal/page/camera_page.dart';
+import 'package:memoreal/routes/route.dart';
 // import 'package:memoreal/page/pages.dart';
 
 // カメラデバイス情報のリスト定義
@@ -37,6 +38,7 @@ class MyApp extends StatelessWidget {
       // デバッグラベル非表示
       debugShowCheckedModeBanner: false,
       title: AppConstants.appTitle,
+      routes: routes,
       theme: ThemeData(
           appBarTheme: const AppBarTheme(
               //   // 非表示
