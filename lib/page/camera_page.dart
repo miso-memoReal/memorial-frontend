@@ -191,6 +191,13 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                                 color: ColorConstants.themeColor, fontSize: 24),
                           ))
                     ],
-                  )));
+                  ),
+            floatingActionButton: FloatingActionButton(
+              onPressed: () {
+                Navigator.pushNamed(context, "/memoCreate");
+                },
+                child: const Icon(Icons.add),
+            )
+        ));
   }
 }
