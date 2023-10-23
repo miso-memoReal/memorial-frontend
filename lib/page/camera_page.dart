@@ -195,9 +195,8 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
             floatingActionButton: FloatingActionButton(
               onPressed: () {
                 Navigator.pushNamed(context, "/memoCreate");
-                },
-                child: const Icon(Icons.add),
-            )
-        ));
+              },
+              child: const Icon(Icons.add),
+            )));
   }
 }

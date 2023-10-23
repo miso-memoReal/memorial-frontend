@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'confirm_page.dart';
 
@@ -28,9 +27,7 @@ class _MemoCreateState extends State<MemoCreate> {
           ),
           ElevatedButton(
             onPressed: () {
-              Navigator.pushNamed(
-                  context,
-                  "/memoConfirm",
+              Navigator.pushNamed(context, "/memoConfirm",
                   arguments: ConfirmSendArguments(str: argtext));
             },
             child: const Text('確認へ進む'),
@@ -39,5 +36,4 @@ class _MemoCreateState extends State<MemoCreate> {
       ),
     );
   }
-
 }
