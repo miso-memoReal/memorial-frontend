@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'confirm_page.dart';
 
 class MemoCreate extends StatefulWidget {
+  const MemoCreate({super.key});
+
   @override
-  _MemoCreateState createState() => _MemoCreateState();
+  MemoCreateState createState() => MemoCreateState();
 }
 
-class _MemoCreateState extends State<MemoCreate> {
+class MemoCreateState extends State<MemoCreate> {
   String argtext = ''; // メモの内容を保持する変数
 
   @override

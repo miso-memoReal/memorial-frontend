@@ -172,7 +172,7 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                 : Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Row(),
+                      const Row(),
                       const Text(PermissionConstans.cameraMsgDenied,
                           style: TextStyle(
                               color: ColorConstants.primaryColor,

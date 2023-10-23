@@ -15,14 +15,13 @@ class MemoConfirm extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('memoconfirm'),
+        title: const Text('memoconfirm'),
       ),
       body: Column(
         children: [
           const Text("メモ内容"),
-          Text('${args.str}'),
+          Text(args.str),
           ElevatedButton(
-            child: Center(child: const Text('作成')),
             style: ElevatedButton.styleFrom(
               // primary: Colors.blue,
               // onPrimary: Colors.black,
@@ -33,6 +32,7 @@ class MemoConfirm extends StatelessWidget {
             onPressed: () {
               Navigator.pushNamed(context, "/");
             },
+            child: const Center(child: Text('作成')),
           ),
         ],
       ),
