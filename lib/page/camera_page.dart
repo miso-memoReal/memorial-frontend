@@ -5,6 +5,7 @@ import 'dart:developer';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:memoreal/constants/constants.dart';
 import 'package:memoreal/main.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -46,6 +47,11 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
       setState(() {
         _isCameraPermissionGranted = true;
       });
+
+      // .envファイル読み込み確認　（後で削除）
+      // **************************************
+      print(dotenv.get("API_BASE_URL"));
+      // **************************************
 
       onNewCameraSelected(cameras.first);
     }
