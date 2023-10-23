@@ -34,8 +34,8 @@ jobs:
       - name: flutter pub get
         run: flutter pub get
 
-      - name: flutter format lib
-        run: flutter format lib
+      - name: dart format lib
+        run: dart format lib
 
       - name: flutter analyze
         run: flutter analyze
