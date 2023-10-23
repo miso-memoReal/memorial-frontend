@@ -2,6 +2,7 @@
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:memoreal/constants/constants.dart';
 import 'package:memoreal/page/camera_page.dart';
 // import 'package:memoreal/page/pages.dart';
@@ -13,6 +14,9 @@ Future<void> main() async {
   try {
     // 初期化
     WidgetsFlutterBinding.ensureInitialized();
+
+    // 環境変数読み込み
+    await dotenv.load(fileName: ".env");
 
     // デバイスで使用可能なカメラのリストを取得
     cameras = await availableCameras();
