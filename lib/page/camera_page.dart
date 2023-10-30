@@ -6,6 +6,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:memoreal/components/components.dart';
 import 'package:memoreal/constants/constants.dart';
 import 'package:memoreal/main.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -148,19 +149,27 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
             backgroundColor: ColorConstants.themeColor,
             body: _isCameraPermissionGranted
                 ? _isCameraInitialized
-                    ? Column(
-                        children: [
-                          CameraPreview(
-                            controller!,
-                            child: LayoutBuilder(builder: (BuildContext context,
-                                BoxConstraints constraints) {
-                              return GestureDetector(
-                                behavior: HitTestBehavior.opaque,
-                                onTapDown: ((details) =>
-                                    onViewFinderTap(details, constraints)),
-                              );
-                            }),
-                          )
+                    // 要素の重ね合わせ
+                    ? Stack(
+                        fit: StackFit.expand,
+                        children: <Widget>[
+                          Column(
+                            children: [
+                              CameraPreview(
+                                controller!,
+                                child: LayoutBuilder(builder:
+                                    (BuildContext context,
+                                        BoxConstraints constraints) {
+                                  return GestureDetector(
+                                    behavior: HitTestBehavior.opaque,
+                                    onTapDown: ((details) =>
+                                        onViewFinderTap(details, constraints)),
+                                  );
+                                }),
+                              )
+                            ],
+                          ),
+                          const ModelView()
                         ],
                       )
                     : const Center(
