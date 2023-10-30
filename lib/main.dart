@@ -6,6 +6,9 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:memoreal/constants/constants.dart';
 import 'package:memoreal/page/camera_page.dart';
 import 'package:memoreal/routes/route.dart';
+
+import 'page/pages.dart';
+
 // import 'package:memoreal/page/pages.dart';
 
 // カメラデバイス情報のリスト定義
