@@ -2,8 +2,13 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 	<dict>
+		<!-- model viewer plus -->
+		<key>io.flutter.embedded_views_preview</key>
+		<true />
+		<!-- camera -->
 		<key>NSCameraUsageDescription</key>
 		<string>AR環境の為にカメラの許可をしてください</string>
+		<!-- micro phone -->
 		<key>NSMicrophoneUsageDescription</key>
 		<string>AR環境の為にカメラの許可をしてください</string>
 		<key>CFBundleDevelopmentRegion</key>
