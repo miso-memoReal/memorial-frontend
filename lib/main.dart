@@ -4,7 +4,6 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:memoreal/constants/constants.dart';
-import 'package:memoreal/page/camera_page.dart';
 import 'package:memoreal/routes/route.dart';
 
 import 'page/pages.dart';
@@ -49,7 +48,7 @@ class MyApp extends StatelessWidget {
               //   color: Colors.transparent
               color: ColorConstants.themeColor)),
       // home: const HomePage(),
-      home: const CameraPage(),
+      home: const HomePage(),
     );
   }
 }
