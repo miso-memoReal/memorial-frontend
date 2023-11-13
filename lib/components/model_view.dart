@@ -10,9 +10,9 @@ class ModelView extends StatelessWidget {
       src: 'https://modelviewer.dev/shared-assets/models/Astronaut.glb',
       alt: 'A 3D model of an astronaut',
       ar: true,
-      autoRotate: true,
+      autoRotate: false,
       iosSrc: 'https://modelviewer.dev/shared-assets/models/Astronaut.usdz',
-      disableZoom: true,
+      disableZoom: false,
     );
   }
 }
