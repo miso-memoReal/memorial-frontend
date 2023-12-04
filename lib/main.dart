@@ -42,6 +42,7 @@ class MyApp extends StatelessWidget {
       title: AppConstants.appTitle,
       routes: routes,
       theme: ThemeData(
+          fontFamily: 'NotoSans',
           appBarTheme: const AppBarTheme(
               //   // 非表示
               //   elevation: 0.0,
