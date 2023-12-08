@@ -7,10 +7,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:memoreal/components/components.dart';
-import 'package:memoreal/components/location.dart';
-import 'package:memoreal/components/ui/transform.dart';
 import 'package:memoreal/constants/constants.dart';
-import 'package:memoreal/page/mock.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 
 class HomePage extends StatefulWidget {
