@@ -9,8 +9,7 @@ const currentInfoString = """
 
 // メモの位置
 // memo Location
-const memoInfoString =
-    """
+const memoInfoString = """
 {
   "title": "Title 1234567",
   "body": "123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678",
@@ -19,7 +18,4 @@ const memoInfoString =
   "x": 28.000001,
   "y": 268.000001
 }
-""";
-
-const memosString = """
 """;
