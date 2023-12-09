@@ -8,8 +8,6 @@ import 'package:memoreal/routes/route.dart';
 
 import 'page/pages.dart';
 
-// import 'package:memoreal/page/pages.dart';
-
 // カメラデバイス情報のリスト定義
 List<CameraDescription> cameras = [];
 
