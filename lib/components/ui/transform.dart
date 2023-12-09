@@ -10,20 +10,20 @@ Widget memoPositioning(Widget widget, double x, double y) {
 
   // Y座標値調整
   double setYCoordinate(double y) {
-    double yCoordinate = 0.0;
     // 微調整必要
-    yCoordinate = y;
-    return yCoordinate;
+    return y * 1;
   }
 
   // setting
   yCoordinate = setYCoordinate(y);
-  xCoordinate = x * yCoordinate;
+  // xCoordinate = x * yCoordinate;
+  xCoordinate = x * 1;
 
   return Transform.scale(
-    scale: y,
-    child: Transform.translate(
-      offset: Offset(xCoordinate, 200),
+    scale: yCoordinate,
+    child: 
+    Transform.translate(
+      offset: Offset(xCoordinate, -100),
       child: widget,
     ),
   );
