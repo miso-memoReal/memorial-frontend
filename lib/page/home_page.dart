@@ -1,6 +1,5 @@
-// ignore_for_file: avoid_print, unnecessary_null_comparison, prefer_interpolation_to_compose_strings
+// ignore_for_file: avoid_print, unnecessary_null_comparison, prefer_interpolation_to_compose_strings, unrelated_type_equality_checks
 
-import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 
@@ -26,50 +25,33 @@ class _HomePageState extends State<HomePage> {
   late Map area;
   // ターゲットの表示座標
   late Offset locate;
-  late Offset currentPosi = Offset(cJson["x"], cJson["y"]);
-  late Offset memoPosi = Offset(memo["x"], memo["y"]);
+  // カレントポジション
+  late Offset cp = Offset(cJson["x"], cJson["y"]);
+  // メモポジション
+  late Offset mp = Offset(memo["x"], memo["y"]);
 
-  // ジャイロセンサー ---- start ------------------------------------------------
-  static const _interval = 0.02;
-  static const _maxAngle = 180;
-  static const _maxForegroundMove = Offset(0, 0);
-  static const _inititalForegroundOffset = Offset(0, 0);
+  // ---- センサー ---- start ------------------------------------------------
 
-  late StreamSubscription<GyroscopeEvent> streamGyrpscopeEvent;
+  late Offset angle = const Offset(0, 0);
 
-  Offset foregroundOffset = _inititalForegroundOffset;
-
-  void listenGyroscopeEvent(GyroscopeEvent event) {
-    final angle =
-        Offset(event.x * _interval * 180 / pi, event.y * _interval * 180 / pi);
-
-    final addForegroundOffset = Offset(
-        angle.dx / _maxAngle * _maxForegroundMove.dx,
-        angle.dy / _maxAngle * _maxForegroundMove.dy);
-
-    if (angle.dx >= _maxAngle || angle.dy >= _maxAngle) {
-      return;
-    }
-
-    final newForegroundOffse = foregroundOffset + addForegroundOffset;
-
-    if (newForegroundOffse.dx >=
-            _inititalForegroundOffset.dx + _maxForegroundMove.dx ||
-        newForegroundOffse.dx <=
-            _inititalForegroundOffset.dx - _maxForegroundMove.dx ||
-        newForegroundOffse.dy >=
-            _inititalForegroundOffset.dy + _maxForegroundMove.dy ||
-        newForegroundOffse.dy <=
-            _inititalForegroundOffset.dy - _maxForegroundMove.dy) {
-      return;
-    }
-
+  void setGyroValue(GyroscopeEvent event) {
+    const extendedDistance = 1.2;
     setState(() {
-      foregroundOffset = foregroundOffset + addForegroundOffset;
+      angle = angle +
+          Offset((event.x * 180 / pi) * extendedDistance,
+              (event.y * 180 / pi) * extendedDistance);
     });
+    print(angle);
   }
 
-  // ジャイロセンサー --- end ---------------------------------------------------
+  // void setAcceleromtorValue(AccelerometerEvent event) {
+  //   setState(() {
+  //     angle = angle + Offset(event.z, event.x);
+  //   });
+  //   print(angle);
+  // }
+
+  // ---- センサー --- end ---------------------------------------------------
 
   // 初期動作
   @override
@@ -79,21 +61,30 @@ class _HomePageState extends State<HomePage> {
 
     setState(() {
       // ---エリア範囲算出------------------------------------
-      area = getArea(currentPosi.dx, currentPosi.dy);
+      area = getArea(cp.dx, cp.dy);
 
       // ---ターゲットとの差分算出-----------------------------
-      locate =
-          getLocate(currentPosi.dx, memoPosi.dx, currentPosi.dx, memoPosi.dy);
+      locate = Offset(
+          // X座標
+          mp.dx - cp.dx,
+          // Y座標
+          cp.dy / mp.dy);
     });
 
-    // ジャイロセンサー
-    streamGyrpscopeEvent = gyroscopeEvents.listen((listenGyroscopeEvent));
+    // センサー
+    gyroscopeEvents.listen(setGyroValue);
+    // accelerometerEvents.listen(setAcceleromtorValue);
 
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
+    // デフォルトのポジション調整の値
+    double initHorizontal = size.width / 7;
+    double initVertical = size.height / 5;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -106,11 +97,31 @@ class _HomePageState extends State<HomePage> {
         child: Stack(
           children: [
             Positioned(
-              top: foregroundOffset.dx - _inititalForegroundOffset.dx,
-              left: foregroundOffset.dy - _inititalForegroundOffset.dy,
-              child: memoPositioning(
-                  memoCard(memo['title'], memo['body']), locate.dx, locate.dy),
-            )
+              top: initVertical + angle.dx,
+              left: initHorizontal + angle.dy,
+              child: memoPositioning(memoCard(memo['title'], memo['content']),
+                  locate.dx, locate.dy),
+            ),
+            Positioned(
+                top: size.height - 200,
+                left: size.width / 3,
+                child: SizedBox(
+                  width: size.width / 3,
+                  height: 50,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        angle = const Offset(0.0, 0.0);
+                      });
+                    },
+                    child: const Center(child: Text('リセット')),
+                  ),
+                ))
           ],
           // children: [
           //   Text("ジャイロセンサーの値:\n$gyroscopeValue"),
