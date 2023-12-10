@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class ConfirmSendArguments {
   final String str;
+  final String lat;
+  final String lon;
 
-  ConfirmSendArguments({required this.str});
+  ConfirmSendArguments(
+      {required this.str, required this.lat, required this.lon});
 }
 
 class MemoConfirm extends StatelessWidget {
@@ -23,13 +27,18 @@ class MemoConfirm extends StatelessWidget {
           Text(args.str),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              // primary: Colors.blue,
-              // onPrimary: Colors.black,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
             onPressed: () {
+              final url =
+                  Uri.parse('https://nginx-na2na-p.cloud.okteto.net/api/memo');
+              http.post(url, body: {
+                'content': args.str,
+                'latitude': args.lat,
+                'longitude': args.lon,
+              });
               Navigator.pushNamed(context, "/");
             },
             child: const Center(child: Text('作成')),
@@ -37,6 +46,5 @@ class MemoConfirm extends StatelessWidget {
         ],
       ),
     );
-    // TODO: implement build
   }
 }

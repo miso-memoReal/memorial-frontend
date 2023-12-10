@@ -54,7 +54,18 @@ class _MyAppState extends State<MyApp> {
               //   color: Colors.transparent
               color: ColorConstants.themeColor)),
       // home: const HomePage(),
-      home: const HomePage(),
+      home: const Stack(
+        children: [
+          // HomePage
+          CameraPage(),
+          // CameraPage (裏に配置)
+          Positioned.fill(
+            child: IgnorePointer(
+              child: HomePage(),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

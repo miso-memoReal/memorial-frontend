@@ -2,12 +2,16 @@
 
 import 'dart:convert';
 import 'dart:math';
+import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:memoreal/components/components.dart';
 import 'package:memoreal/constants/constants.dart';
 import 'package:sensors_plus/sensors_plus.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:http/http.dart' as http;
+import 'package:rxdart/rxdart.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -17,18 +21,60 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  // 現在地初期化
+  late double lat;
+  late double lon;
+  late Future<List<dynamic>> memosFuture;
+
+  // データ取得 (現在地取得とメモ位置取得)
+  Future<void> getData() async {
+    await getCurrentLocation();
+    memosFuture = getMemoLocation();
+  }
+
   // 現在値取得
-  Map cJson = jsonDecode(currentInfoString);
+  Future<void> getCurrentLocation() async {
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    setState(() {
+      lat = position.latitude;
+      lon = position.longitude;
+    });
+    cp = Offset(lat, lon);
+  }
+
+  // メモ位置初期化
+  late List<dynamic> memos;
   // メモ位置取得
-  Map memo = jsonDecode(memoInfoString);
+  Future<List<dynamic>> getMemoLocation() async {
+    final url = Uri.parse(
+        "https://nginx-na2na-p.cloud.okteto.net/api/memo/${lon.toString()}/${lat.toString()}");
+    final response = await http.get(url);
+    final json = jsonDecode(response.body);
+    setState(() {
+      memos = json;
+      mps = memos
+          .map((memo) => Offset(
+              double.parse(memo['latitude']), double.parse(memo['longitude'])))
+          .toList();
+      // ---エリア範囲算出------------------------------------
+      area = getArea(cp.dx, cp.dy);
+
+      // ---ターゲットとの差分算出-----------------------------
+      locate = mps.map((mp) => Offset(mp.dx - cp.dx, cp.dy / mp.dy)).toList();
+    });
+
+    return memos;
+  }
+
   // エリア範囲初期値
   late Map area;
   // ターゲットの表示座標
-  late Offset locate;
+  late List<Offset> locate;
   // カレントポジション
-  late Offset cp = Offset(cJson["x"], cJson["y"]);
+  late Offset cp;
   // メモポジション
-  late Offset mp = Offset(memo["x"], memo["y"]);
+  late List<Offset> mps;
 
   // ---- センサー ---- start ------------------------------------------------
 
@@ -41,17 +87,22 @@ class _HomePageState extends State<HomePage> {
           Offset((event.x * 180 / pi) * extendedDistance,
               (event.y * 180 / pi) * extendedDistance);
     });
-    print(angle);
   }
 
-  // void setAcceleromtorValue(AccelerometerEvent event) {
-  //   setState(() {
-  //     angle = angle + Offset(event.z, event.x);
-  //   });
-  //   print(angle);
-  // }
-
   // ---- センサー --- end ---------------------------------------------------
+
+  // ---- 方角の取得 ---- start ----------------------------------------------
+  // 北を0、東を90、西を-90、南を180若しくは-180とした方角を、sensor_plusのgyroscopeEventsとmagnetometerEventsを使って取得する
+  // void calcDuration() {
+  //   gyroscopeEvents
+  //       .throttleTime(const Duration(milliseconds: 1000))
+  //       .listen((GyroscopeEvent gyroEvent) {
+  //     magnetometerEvents
+  //         .throttleTime(const Duration(milliseconds: 1000))
+  //         .listen((MagnetometerEvent magEvent) {});
+  //   });
+  // }
+  // ---- 方角の取得 ---- end ------------------------------------------------
 
   // 初期動作
   @override
@@ -60,22 +111,21 @@ class _HomePageState extends State<HomePage> {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
 
     setState(() {
-      // ---エリア範囲算出------------------------------------
-      area = getArea(cp.dx, cp.dy);
-
-      // ---ターゲットとの差分算出-----------------------------
-      locate = Offset(
-          // X座標
-          mp.dx - cp.dx,
-          // Y座標
-          cp.dy / mp.dy);
+      getData();
+      // calcDuration();
     });
 
     // センサー
     gyroscopeEvents.listen(setGyroValue);
-    // accelerometerEvents.listen(setAcceleromtorValue);
 
     super.initState();
+
+    // 指定秒ごとに実行する
+    Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() {
+        getData();
+      });
+    });
   }
 
   @override
@@ -93,57 +143,39 @@ class _HomePageState extends State<HomePage> {
         ),
         centerTitle: true,
       ),
+      backgroundColor: Colors.transparent,
       body: Center(
-        child: Stack(
-          children: [
-            Positioned(
-              top: initVertical + angle.dx,
-              left: initHorizontal + angle.dy,
-              child: memoPositioning(memoCard(memo['title'], memo['content']),
-                  locate.dx, locate.dy),
-            ),
-            Positioned(
-                top: size.height - 200,
-                left: size.width / 3,
-                child: SizedBox(
-                  width: size.width / 3,
-                  height: 50,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
+        child: FutureBuilder<List<dynamic>>(
+          future: memosFuture,
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              // エラーが発生した場合の処理
+              return Text('Error: ${snapshot.error}');
+            } else {
+              // データが正常に取得された場合の処理
+              memos = snapshot.data!;
+              area = getArea(cp.dx, cp.dy);
+              locate = mps
+                  .map((mp) => Offset(mp.dx - cp.dx, cp.dy / mp.dy))
+                  .toList();
+
+              return Stack(
+                children: [
+                  ...memos.map((memo) {
+                    return Positioned(
+                      top: initVertical + angle.dx,
+                      left: initHorizontal + angle.dy,
+                      child: memoPositioning(
+                        memoCard("メモ", memo['content'], memo['distance']),
+                        locate[memos.indexOf(memo)].dx,
+                        locate[memos.indexOf(memo)].dy,
                       ),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        angle = const Offset(0.0, 0.0);
-                      });
-                    },
-                    child: const Center(child: Text('リセット')),
-                  ),
-                ))
-          ],
-          // children: [
-          //   Text("ジャイロセンサーの値:\n$gyroscopeValue"),
-          //   Text("\nメモとのX座標差分: " + locate["x"].toString()),
-          //   Text("\nメモとのy座標スケール値: " + locate['y'].toString()),
-          //   Text("\n現在値 x: " +
-          //       cInfo['x'].toString() +
-          //       ", y: " +
-          //       cInfo['y'].toString()),
-          //   Text("\nメモ位置 x: " +
-          //       memo['x'].toString() +
-          //       ", y: " +
-          //       memo['y'].toString()),
-          //   Text("\nエリア \n top:  " +
-          //       area['top'].toString() +
-          //       ", \n right:  " +
-          //       area['right'].toString() +
-          //       ", \n bottom:  " +
-          //       area['bottom'].toString() +
-          //       ", \n left:  " +
-          //       area['left'].toString()),
-          // ],
+                    );
+                  }).toList(),
+                ],
+              );
+            }
+          },
         ),
       ),
     );

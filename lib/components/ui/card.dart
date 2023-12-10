@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:memoreal/constants/constants.dart';
 
-Widget memoCard(String title, String body) {
+Widget memoCard(String title, String body, String distance) {
   final bodyLen = body.length;
   double cardHeight = 0;
+  double rate = double.parse(distance) / 100;
 
   double getHeight(int strLen) {
     const maxLen = 32;
@@ -19,8 +20,8 @@ Widget memoCard(String title, String body) {
   cardHeight = 100 + getHeight(bodyLen) + title.length.toDouble();
 
   return (SizedBox(
-      width: 300,
-      height: cardHeight,
+      width: 300 - (rate * 300),
+      height: cardHeight - (rate * cardHeight),
       child: Card(
         color: ColorConstants.accentColor,
         elevation: 5,
