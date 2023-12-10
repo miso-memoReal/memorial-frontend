@@ -107,24 +107,19 @@ class _HomePageState extends State<HomePage> {
   // 初期動作
   @override
   void initState() {
+    super.initState();
+
     // Androidデバイスの通知バー非表示
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
 
-    setState(() {
-      getData();
-      // calcDuration();
-    });
+    getData();
 
     // センサー
     gyroscopeEvents.listen(setGyroValue);
 
-    super.initState();
-
     // 指定秒ごとに実行する
-    Timer.periodic(const Duration(seconds: 1), (timer) {
-      setState(() {
-        getData();
-      });
+    Timer.periodic(const Duration(seconds: 10), (timer) async {
+      await getData();
     });
   }
 
@@ -151,6 +146,9 @@ class _HomePageState extends State<HomePage> {
             if (snapshot.hasError) {
               // エラーが発生した場合の処理
               return Text('Error: ${snapshot.error}');
+            } else if (!snapshot.hasData) {
+              // データが取得されるまでの間の処理
+              return const CircularProgressIndicator();
             } else {
               // データが正常に取得された場合の処理
               memos = snapshot.data!;
