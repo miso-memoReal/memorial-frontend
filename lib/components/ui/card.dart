@@ -20,7 +20,7 @@ Widget memoCard(String title, String body, String distance) {
   cardHeight = 100 + getHeight(bodyLen) + title.length.toDouble();
 
   return (SizedBox(
-      width: 300 - (rate * 300),
+      width: 300,
       height: cardHeight - (rate * cardHeight),
       child: Card(
         color: ColorConstants.accentColor,

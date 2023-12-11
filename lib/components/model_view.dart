@@ -7,11 +7,12 @@ class ModelView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const ModelViewer(
-      src: 'https://modelviewer.dev/shared-assets/models/Astronaut.glb',
+      // assets/models/arrow.glbをsrcに指定
+      src: 'assets/models/arrow.glb',
       alt: 'A 3D model of an astronaut',
       ar: true,
       autoRotate: false,
-      iosSrc: 'https://modelviewer.dev/shared-assets/models/Astronaut.usdz',
+      iosSrc: 'assets/models/arrow.glb',
       disableZoom: false,
     );
   }
