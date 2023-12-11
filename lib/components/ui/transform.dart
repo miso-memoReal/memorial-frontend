@@ -21,8 +21,7 @@ Widget memoPositioning(Widget widget, double x, double y) {
 
   return Transform.scale(
     scale: yCoordinate,
-    child: 
-    Transform.translate(
+    child: Transform.translate(
       offset: Offset(xCoordinate, -100),
       child: widget,
     ),

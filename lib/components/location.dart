@@ -11,7 +11,6 @@ Map<String, double> getArea(double x, double y) {
   return {"top": top, "right": right, "bottom": bottom, "left": left};
 }
 
-
 Map getMemo(Map memo) {
   return {
     "title": memo['title'],
