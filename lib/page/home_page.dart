@@ -11,7 +11,6 @@ import 'package:memoreal/constants/constants.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
-import 'package:rxdart/rxdart.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -34,6 +33,13 @@ class _HomePageState extends State<HomePage> {
 
   // 現在値取得
   Future<void> getCurrentLocation() async {
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permissions are denied');
+      }
+    }
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
     setState(() {
@@ -107,24 +113,19 @@ class _HomePageState extends State<HomePage> {
   // 初期動作
   @override
   void initState() {
+    super.initState();
+
     // Androidデバイスの通知バー非表示
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
 
-    setState(() {
-      getData();
-      // calcDuration();
-    });
+    getData();
 
     // センサー
     gyroscopeEvents.listen(setGyroValue);
 
-    super.initState();
-
     // 指定秒ごとに実行する
-    Timer.periodic(const Duration(seconds: 1), (timer) {
-      setState(() {
-        getData();
-      });
+    Timer.periodic(const Duration(seconds: 10), (timer) async {
+      await getData();
     });
   }
 
@@ -151,6 +152,9 @@ class _HomePageState extends State<HomePage> {
             if (snapshot.hasError) {
               // エラーが発生した場合の処理
               return Text('Error: ${snapshot.error}');
+            } else if (!snapshot.hasData) {
+              // データが取得されるまでの間の処理
+              return const CircularProgressIndicator();
             } else {
               // データが正常に取得された場合の処理
               memos = snapshot.data!;
