@@ -166,26 +166,6 @@ class _HomePageState extends State<HomePage> {
                   .map((mp) => Place((mp.dx - cp.dx) * 100000000,
                       (cp.dy - mp.dy).abs() * 1000000))
                   .toList();
-              debugPrint(
-                  "cpX:" + cp.dx.toString() + ", cpY: " + cp.dy.toString());
-              debugPrint("[1 mpX:" +
-                  mps[0].dx.toString() +
-                  ", mpY: " +
-                  mps[0].dy.toString() +
-                  ", locateX: " +
-                  locate[0].dx.toString() +
-                  ", locateY: " +
-                  locate[0].dy.toString() +
-                  "]");
-              debugPrint("[2 mpX:" +
-                  mps[1].dx.toString() +
-                  ", mpY: " +
-                  mps[1].dy.toString() +
-                  ", locateX: " +
-                  locate[1].dx.toString() +
-                  ", locateY: " +
-                  locate[1].dy.toString() +
-                  "]");
               return Stack(
                 children: [
                   ...memos.map((memo) {
