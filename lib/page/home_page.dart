@@ -20,6 +20,15 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
+class Place {
+  final double dx;
+  final double dy;
+
+  Place(this.dx, this.dy);
+
+  Place operator +(Place other) => Place(dx + other.dx, dy + other.dy);
+}
+
 class _HomePageState extends State<HomePage> {
   // 現在地初期化
   late double lat;
@@ -40,7 +49,7 @@ class _HomePageState extends State<HomePage> {
       lat = position.latitude;
       lon = position.longitude;
     });
-    cp = Offset(lat, lon);
+    cp = Place(lat, lon);
   }
 
   // メモ位置初期化
@@ -54,14 +63,14 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       memos = json;
       mps = memos
-          .map((memo) => Offset(
+          .map((memo) => Place(
               double.parse(memo['latitude']), double.parse(memo['longitude'])))
           .toList();
       // ---エリア範囲算出------------------------------------
       area = getArea(cp.dx, cp.dy);
 
       // ---ターゲットとの差分算出-----------------------------
-      locate = mps.map((mp) => Offset(mp.dx - cp.dx, cp.dy / mp.dy)).toList();
+      locate = mps.map((mp) => Place(mp.dx - cp.dx, cp.dy / mp.dy)).toList();
     });
 
     return memos;
@@ -70,21 +79,21 @@ class _HomePageState extends State<HomePage> {
   // エリア範囲初期値
   late Map area;
   // ターゲットの表示座標
-  late List<Offset> locate;
+  late List<Place> locate;
   // カレントポジション
-  late Offset cp;
+  late Place cp;
   // メモポジション
-  late List<Offset> mps;
+  late List<Place> mps;
 
   // ---- センサー ---- start ------------------------------------------------
 
-  late Offset angle = const Offset(0, 0);
+  late Place angle = Place(0, 0);
 
   void setGyroValue(GyroscopeEvent event) {
     const extendedDistance = 1.2;
     setState(() {
       angle = angle +
-          Offset((event.x * 180 / pi) * extendedDistance,
+          Place((event.x * 180 / pi) * extendedDistance,
               (event.y * 180 / pi) * extendedDistance);
     });
   }
@@ -118,7 +127,7 @@ class _HomePageState extends State<HomePage> {
     gyroscopeEvents.listen(setGyroValue);
 
     // 指定秒ごとに実行する
-    Timer.periodic(const Duration(seconds: 10), (timer) async {
+    Timer.periodic(const Duration(seconds: 1), (timer) async {
       await getData();
     });
   }
@@ -154,9 +163,29 @@ class _HomePageState extends State<HomePage> {
               memos = snapshot.data!;
               area = getArea(cp.dx, cp.dy);
               locate = mps
-                  .map((mp) => Offset(mp.dx - cp.dx, cp.dy / mp.dy))
+                  .map((mp) => Place((mp.dx - cp.dx) * 100000000,
+                      (cp.dy - mp.dy).abs() * 1000000))
                   .toList();
-
+              debugPrint(
+                  "cpX:" + cp.dx.toString() + ", cpY: " + cp.dy.toString());
+              debugPrint("[1 mpX:" +
+                  mps[0].dx.toString() +
+                  ", mpY: " +
+                  mps[0].dy.toString() +
+                  ", locateX: " +
+                  locate[0].dx.toString() +
+                  ", locateY: " +
+                  locate[0].dy.toString() +
+                  "]");
+              debugPrint("[2 mpX:" +
+                  mps[1].dx.toString() +
+                  ", mpY: " +
+                  mps[1].dy.toString() +
+                  ", locateX: " +
+                  locate[1].dx.toString() +
+                  ", locateY: " +
+                  locate[1].dy.toString() +
+                  "]");
               return Stack(
                 children: [
                   ...memos.map((memo) {
