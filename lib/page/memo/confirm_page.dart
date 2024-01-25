@@ -27,6 +27,9 @@ class MemoConfirm extends StatelessWidget {
         Container(
           color: Colors.blue.withOpacity(0.1),
         ),
+        Container(
+          color: Colors.blue.withOpacity(0.1),
+        ),
         BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
           child: Container(
@@ -56,19 +59,33 @@ class MemoConfirm extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                const SizedBox(height: 150),
                 const Text(
                   "メモ内容",
                   style: TextStyle(fontSize: 18),
                 ),
-                Text(
-                  args.str,
-                  style: TextStyle(fontSize: 16),
+                const SizedBox(height: 30),
+                Container(
+                  // color: Colors.blue,
+                  width: 350,
+                  padding: const EdgeInsets.all(100),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF5FC569), // 背景色を指定
+                    borderRadius: BorderRadius.circular(10.0), // 任意の角丸を指定
+                  ),
+                  child: Text(
+                    args.str,
+                    overflow: TextOverflow.clip,
+                    style: const TextStyle(fontSize: 16),
+                  ),
                 ),
+                const SizedBox(height: 50),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF5FC569),
+                    minimumSize: const Size(198, 56),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
+                      borderRadius: BorderRadius.circular(50),
                     ),
                   ),
                   onPressed: () {
@@ -81,8 +98,9 @@ class MemoConfirm extends StatelessWidget {
                     });
                     Navigator.pushNamed(context, "/");
                   },
-                  child: const Text("メモを作成", style: TextStyle(fontSize: 16)),
+                  child: const Text("作成", style: TextStyle(fontSize: 20)),
                 ),
+                const SizedBox(height: 100),
               ],
             ),
           ),

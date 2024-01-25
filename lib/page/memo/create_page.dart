@@ -34,9 +34,8 @@ class MemoCreateState extends State<MemoCreate> {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          // 透明度が99%の白い背景
           Container(
-            color: Colors.blue.withOpacity(0.1),
+            color: Colors.white.withOpacity(0.1),
           ),
           // 透明な背景とブラー効果
           BackdropFilter(
@@ -64,27 +63,34 @@ class MemoCreateState extends State<MemoCreate> {
             ),
             body: Column(
               children: [
-                const SizedBox(height: 100),
+                const SizedBox(height: 150),
                 const Text(
                   "メモ内容",
                   style: TextStyle(fontSize: 18),
                 ),
+                const SizedBox(height: 50),
                 Expanded(
-                  child: TextField(
-                    keyboardType: TextInputType.multiline,
-                    maxLines: 5,
-                    decoration: InputDecoration(
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: const BorderSide(color: Color(0xFF5FC569)),
+                  child: Center(
+                    child: Container(
+                      width: 350,
+                      child: TextField(
+                        keyboardType: TextInputType.multiline,
+                        maxLines: 6,
+                        decoration: InputDecoration(
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide:
+                                const BorderSide(color: Color(0xFF5FC569)),
+                          ),
+                          filled: true,
+                        ),
+                        onChanged: (value) {
+                          setState(() {
+                            argtext = value;
+                          });
+                        },
                       ),
-                      filled: true,
                     ),
-                    onChanged: (value) {
-                      setState(() {
-                        argtext = value;
-                      });
-                    },
                   ),
                 ),
                 ElevatedButton(
@@ -111,7 +117,7 @@ class MemoCreateState extends State<MemoCreate> {
                     style: TextStyle(fontSize: 20),
                   ),
                 ),
-                const SizedBox(height: 400),
+                const SizedBox(height: 300),
               ],
             ),
           ),
