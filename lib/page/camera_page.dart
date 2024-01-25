@@ -139,13 +139,6 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-            appBar: AppBar(
-              title: const Text(
-                AppConstants.appTitle,
-                style: TextStyle(color: ColorConstants.primaryColor),
-              ),
-              centerTitle: true,
-            ),
             backgroundColor: ColorConstants.themeColor,
             body: _isCameraPermissionGranted
                 ? _isCameraInitialized
@@ -196,16 +189,25 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                               padding: const EdgeInsets.all(12)),
                           child: const Text(
                             PermissionConstans.cameraMsgGive,
+                            maxLines: 5,
                             style: TextStyle(
                                 color: ColorConstants.themeColor, fontSize: 24),
                           ))
                     ],
                   ),
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerFloat,
             floatingActionButton: FloatingActionButton(
-              onPressed: () {
-                Navigator.pushNamed(context, "/memoCreate");
-              },
-              child: const Icon(Icons.add),
-            )));
+                onPressed: () {
+                  Navigator.pushNamed(context, "/memoCreate");
+                },
+                child: const Icon(Icons.message_outlined),
+                backgroundColor: Colors.transparent,
+                elevation: 0, // 影を表示しない
+                shape: RoundedRectangleBorder(
+                  side: BorderSide(color: Colors.white, width: 2.0),
+                  borderRadius: BorderRadius.circular(50),
+                ) // 円形の形状にする
+                )));
   }
 }
