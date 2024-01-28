@@ -83,7 +83,7 @@ class MemoConfirm extends StatelessWidget {
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF5FC569),
-                    // minimumSize: const Size(198, 56),
+                    minimumSize: const Size(198, 56),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(50),
                     ),
