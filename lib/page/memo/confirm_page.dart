@@ -83,14 +83,14 @@ class MemoConfirm extends StatelessWidget {
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF5FC569),
-                    minimumSize: const Size(198, 56),
+                    // minimumSize: const Size(198, 56),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(50),
                     ),
                   ),
                   onPressed: () {
-                    final url = Uri.parse(
-                        'https://nginx-na2na-p.cloud.okteto.net/api/memo');
+                    final url =
+                        Uri.parse('https://api-th468.na2na.dev/api/memo');
                     http.post(url, body: {
                       'content': args.str,
                       'latitude': args.lat,
