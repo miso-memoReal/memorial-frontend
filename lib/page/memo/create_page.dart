@@ -117,7 +117,7 @@ class MemoCreateState extends State<MemoCreate> {
                     style: TextStyle(fontSize: 20),
                   ),
                 ),
-                const SizedBox(height: 300),
+                const SizedBox(height: 400),
               ],
             ),
           ),

@@ -118,8 +118,6 @@ class _HomePageState extends State<HomePage> {
     // Androidデバイスの通知バー非表示
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
 
-    getData();
-
     // センサー
     gyroscopeEvents.listen(setGyroValue);
 
