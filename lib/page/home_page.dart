@@ -54,7 +54,7 @@ class _HomePageState extends State<HomePage> {
   // メモ位置取得
   Future<List<dynamic>> getMemoLocation() async {
     final url = Uri.parse(
-        "https://nginx-na2na-p.cloud.okteto.net/api/memo/${lon.toString()}/${lat.toString()}");
+        "https://api-th468.na2na.dev/api/memo/${lon.toString()}/${lat.toString()}");
     final response = await http.get(url);
     final json = jsonDecode(response.body);
     setState(() {

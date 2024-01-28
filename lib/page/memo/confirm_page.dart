@@ -33,7 +33,7 @@ class MemoConfirm extends StatelessWidget {
             ),
             onPressed: () {
               final url =
-                  Uri.parse('https://nginx-na2na-p.cloud.okteto.net/api/memo');
+                  Uri.parse('https://api-th468.na2na.dev/api/memo');
               http.post(url, body: {
                 'content': args.str,
                 'latitude': args.lat,
